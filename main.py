@@ -1,10 +1,28 @@
+###############################################################################################################
+
+
+# Robotic hand control using landmark detection
+# hand landmark detector
+# Fathi Mahdi Elsiddig
+# 10/11/2021
+# This code deyect the hand landmarks in real time and send the data to Arduino board through serial communication 
+
+
+##############################################################################################################
+
+
 import cv2
 import mediapipe as mp
 import serial
 import time
+
+########################################################################################################
+
 mp_drawing = mp.solutions.drawing_utils
 mp_drawing_styles = mp.solutions.drawing_styles
 mp_hands = mp.solutions.hands
+
+#######################################################################################################
 
 # For static images:
 IMAGE_FILES = []
@@ -46,6 +64,7 @@ with mp_hands.Hands(
     for hand_world_landmarks in results.multi_hand_world_landmarks:
       mp_drawing.plot_landmarks(
         hand_world_landmarks, mp_hands.HAND_CONNECTIONS, azimuth=5)
+#########################################################################################################
 
 # For webcam input:
 cap = cv2.VideoCapture() # change if you have multi cam
@@ -81,42 +100,25 @@ with mp_hands.Hands(
     counter = 0
     if results.multi_hand_landmarks:
       for hand_landmarks in results.multi_hand_landmarks:
-        print('landmarks:',hand_landmarks)
-        print(
-          f'Index finger tip coordinates: (',
-          f'{hand_landmarks.landmark[mp_hands.HandLandmark.INDEX_FINGER_TIP].x * image_width}, '
-          f'{hand_landmarks.landmark[mp_hands.HandLandmark.INDEX_FINGER_TIP].y * image_height})'
-      )
-        print('thump location: ',hand_landmarks.landmark[wrist].y*100)
-        print('pinky location: ',hand_landmarks.landmark[pinky].y*100)
-        print('ring finger  location: ',hand_landmarks.landmark[ring_finger].y*100)
-        print('middle finger location: ',hand_landmarks.landmark[middle_finger].y*100)
-        print('idex finger location: ',hand_landmarks.landmark[index_finger].y*100)
+        #print('landmarks:',hand_landmarks)
+        #print(
+          #f'Index finger tip coordinates: (',
+          #f'{hand_landmarks.landmark[mp_hands.HandLandmark.INDEX_FINGER_TIP].x * image_width}, '
+          #f'{hand_landmarks.landmark[mp_hands.HandLandmark.INDEX_FINGER_TIP].y * image_height})'
+      #)
+        print('thump location: ',hand_landmarks.landmark[wrist].y)
+        print('pinky location: ',hand_landmarks.landmark[pinky].y)
+        print('ring finger  location: ',hand_landmarks.landmark[ring_finger].y)
+        print('middle finger location: ',hand_landmarks.landmark[middle_finger].y)
+        print('idex finger location: ',hand_landmarks.landmark[index_finger].y)
         #print('datatype: ',type(hand_landmarks.landmark[wrist].y)) # for debugging only
         #arduino.write('thump position'.encode())
-        w = str(int(hand_landmarks.landmark[wrist].y*10))
-        p = str(int(hand_landmarks.landmark[pinky].y*100))
-        r_f = str(int(hand_landmarks.landmark[ring_finger].y*1000))
-        m_f = str(int(hand_landmarks.landmark[middle_finger].y*10000))
-        i_f = str(int(hand_landmarks.landmark[index_finger].y*100000))
-        arduino.write(w.encode())
-        #time.sleep(0.009)
-        arduino.write(p.encode())
-        #time.sleep(0.009)
-        arduino.write(r_f.encode())
-        #time.sleep(0.009)
-        arduino.write(m_f.encode())
-        #time.sleep(0.009)
-        arduino.write(i_f.encode())
-        time.sleep(0.2)
-        #arduino.write(bytes(hand_landmarks.landmark[pinky],'utf-8'))
-        #time.sleep(0.05)
-        #arduino.write(bytes(hand_landmarks.landmark[wring_finger],'utf-8'))
-        #time.sleep(0.05)
-        #arduino.write(bytes(hand_landmarks.landmark[middle_finger],'utf-8'))
-        #time.sleep(0.05)
-        #arduino.write(bytes(hand_landmarks.landmark[index_finger],'utf-8'))
-        #time.sleep(0.05)
+        w = str(hand_landmarks.landmark[wrist].y)
+        p = str(hand_landmarks.landmark[pinky].y)
+        r_f = str(hand_landmarks.landmark[ring_finger].y)
+        m_f = str(hand_landmarks.landmark[middle_finger].y)
+        i_f = str(hand_landmarks.landmark[index_finger].y)
+        arduino.write(bytes(w+','+p+','+r_f+','+m_f+','+i_f,'utf-8'))
         mp_drawing.draw_landmarks(
             image,
             hand_landmarks,
@@ -128,3 +130,4 @@ with mp_hands.Hands(
     if cv2.waitKey(5) & 0xFF == 27:
       break
 cap.release()
+arduino.close()
