@@ -106,11 +106,11 @@ with mp_hands.Hands(
           #f'{hand_landmarks.landmark[mp_hands.HandLandmark.INDEX_FINGER_TIP].x * image_width}, '
           #f'{hand_landmarks.landmark[mp_hands.HandLandmark.INDEX_FINGER_TIP].y * image_height})'
       #)
-        print('thump location: ',hand_landmarks.landmark[wrist].y)
-        print('pinky location: ',hand_landmarks.landmark[pinky].y)
-        print('ring finger  location: ',hand_landmarks.landmark[ring_finger].y)
-        print('middle finger location: ',hand_landmarks.landmark[middle_finger].y)
-        print('idex finger location: ',hand_landmarks.landmark[index_finger].y)
+        #print('thump location: ',hand_landmarks.landmark[wrist].y)
+        #print('pinky location: ',hand_landmarks.landmark[pinky].y)
+        #print('ring finger  location: ',hand_landmarks.landmark[ring_finger].y)
+        #print('middle finger location: ',hand_landmarks.landmark[middle_finger].y)
+        #print('idex finger location: ',hand_landmarks.landmark[index_finger].y)
         #print('datatype: ',type(hand_landmarks.landmark[wrist].y)) # for debugging only
         #arduino.write('thump position'.encode())
         w = str(round(hand_landmarks.landmark[wrist].y,3))

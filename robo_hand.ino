@@ -56,10 +56,22 @@ void loop()
 
  while (!Serial.available());
  data = Serial.readString();
- wrist_angle = atof(data.c_str());
- Serial.println(data); // for debugging only
+ //Serial.println(data);
+ wrist_angle = atof(data.c_str())*100;
+ pinky_angle = atof(data.c_str()+6);
+ m_f_angle = atof(data.c_str()+12);
+ r_f_angle = atof(data.c_str()+18);
+ i_f_angle = atof(data.c_str()+24);
+ //Serial.println(data);
+ wrist_angle = map(wrist_angle,50.0,70.0,255,0);
+ //Serial.println(wrist_angle);// for debugging only
+ //Serial.println(pinky_angle);// for debugging only
+ //Serial.println(m_f_angle);// for debugging only
+ //Serial.println(r_f_angle);// for debugging only
+ //Serial.println(i_f_angle);// for debugging only
  delay(10);
- //Ptr = data;
+ analogWrite(wrist,wrist_angle);
+  //Ptr = data;
  //wrist_angle = atof(data);	
  //pinky_angle = atof(+2data);
  //m_f_angle = atof(+2data);
