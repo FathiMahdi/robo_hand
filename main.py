@@ -69,11 +69,11 @@ with mp_hands.Hands(
 # For webcam input:
 cap = cv2.VideoCapture() # change if you have multi cam
 cap.open('http://172.18.39.139:8000')
-arduino = serial.Serial(port='/dev/ttyACM0',baudrate=115200,timeout=0.1)
+arduino = serial.Serial(port='/dev/ttyACM0',baudrate=115200,timeout=0.8)
 with mp_hands.Hands(
-    max_num_hands=2,
+    max_num_hands=1,
     model_complexity=0,
-    min_detection_confidence=0.5,
+    min_detection_confidence=0.7,
     min_tracking_confidence=0.5) as hands:
   while cap.isOpened():
     success, image = cap.read()
@@ -113,12 +113,13 @@ with mp_hands.Hands(
         print('idex finger location: ',hand_landmarks.landmark[index_finger].y)
         #print('datatype: ',type(hand_landmarks.landmark[wrist].y)) # for debugging only
         #arduino.write('thump position'.encode())
-        w = str(hand_landmarks.landmark[wrist].y)
-        p = str(hand_landmarks.landmark[pinky].y)
-        r_f = str(hand_landmarks.landmark[ring_finger].y)
-        m_f = str(hand_landmarks.landmark[middle_finger].y)
-        i_f = str(hand_landmarks.landmark[index_finger].y)
+        w = str(round(hand_landmarks.landmark[wrist].y,3))
+        p = str(round(hand_landmarks.landmark[pinky].y,3))
+        r_f = str(round(hand_landmarks.landmark[ring_finger].y,3))
+        m_f = str(round(hand_landmarks.landmark[middle_finger].y,3))
+        i_f = str(round(hand_landmarks.landmark[index_finger].y,3))
         arduino.write(bytes(w+','+p+','+r_f+','+m_f+','+i_f,'utf-8'))
+        time.sleep(0.01)
         mp_drawing.draw_landmarks(
             image,
             hand_landmarks,
