@@ -36,7 +36,7 @@ String  data;
 void setup()
 {
  Serial.begin(115200);
- Serial.setTimeout(0.8);
+ Serial.setTimeout(0.1);
  pinMode(wrist,OUTPUT);
  pinMode(pinky,OUTPUT);
  pinMode(middle_finger,OUTPUT);
@@ -58,19 +58,27 @@ void loop()
  data = Serial.readString();
  //Serial.println(data);
  wrist_angle = atof(data.c_str())*100;
- pinky_angle = atof(data.c_str()+6);
- m_f_angle = atof(data.c_str()+12);
- r_f_angle = atof(data.c_str()+18);
- i_f_angle = atof(data.c_str()+24);
+ pinky_angle = atof(data.c_str()+6)*100;
+ m_f_angle = atof(data.c_str()+12)*100;
+ r_f_angle = atof(data.c_str()+18)*100;
+ i_f_angle = atof(data.c_str()+24)*100;
  //Serial.println(data);
- wrist_angle = map(wrist_angle,50.0,70.0,255,0);
- //Serial.println(wrist_angle);// for debugging only
- //Serial.println(pinky_angle);// for debugging only
- //Serial.println(m_f_angle);// for debugging only
- //Serial.println(r_f_angle);// for debugging only
- //Serial.println(i_f_angle);// for debugging only
+ wrist_angle = map(wrist_angle,30.0,90.0,255,0);
+ pinky_angle = map(pinky_angle,30.0,90.0,255,0);
+ m_f_angle = map(m_f_angle,0.0,90.0,255,0);
+ r_f_angle = map(r_f_angle,0.0,90.0,255,0);
+ i_f_angle = map(i_f_angle,0.0,90.0,255,0);
+ Serial.println(wrist_angle);// for debugging only
+ Serial.println(pinky_angle);// for debugging only
+ Serial.println(m_f_angle);// for debugging only
+ Serial.println(r_f_angle);// for debugging only
+ Serial.println(i_f_angle);// for debugging only
  delay(10);
  analogWrite(wrist,wrist_angle);
+ analogWrite(pinky,pinky_angle);
+ analogWrite(middle_finger,m_f_angle);
+ analogWrite(ring_finger,r_f_angle);
+ analogWrite(index_finger,i_f_angle);
   //Ptr = data;
  //wrist_angle = atof(data);	
  //pinky_angle = atof(+2data);
