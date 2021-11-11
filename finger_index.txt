@@ -1,0 +1,5 @@
+Wrist: 4
+Pinky: 20
+Ring_finger: 16
+Middle_finger: 12
+Index_finger: 8
