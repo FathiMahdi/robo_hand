@@ -69,7 +69,7 @@ with mp_hands.Hands(
 # For webcam input:
 cap = cv2.VideoCapture() # change if you have multi cam
 cap.open('http://172.18.39.139:8000')
-arduino = serial.Serial(port='/dev/ttyACM0',baudrate=115200,timeout=0.1)
+arduino = serial.Serial(port='/dev/ttyACM0',baudrate=115200,timeout=0.8)
 with mp_hands.Hands(
     max_num_hands=1,
     model_complexity=0,
