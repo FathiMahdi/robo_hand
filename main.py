@@ -15,7 +15,7 @@ import cv2
 import mediapipe as mp
 import serial
 import time
-
+import numpy as np
 ########################################################################################################
 
 mp_drawing = mp.solutions.drawing_utils
@@ -74,7 +74,7 @@ with mp_hands.Hands(
     max_num_hands=1,
     model_complexity=0,
     min_detection_confidence=0.7,
-    min_tracking_confidence=0.5) as hands:
+    min_tracking_confidence=0.7) as hands:
   while cap.isOpened():
     success, image = cap.read()
     if not success:
@@ -117,15 +117,25 @@ with mp_hands.Hands(
         p = str(round(hand_landmarks.landmark[pinky].y,3))
         r_f = str(round(hand_landmarks.landmark[ring_finger].y,3))
         m_f = str(round(hand_landmarks.landmark[middle_finger].y,3))
-        i_f = str(round(hand_landmarks.landmark[index_finger].y,3))
+        i_f = round(hand_landmarks.landmark[index_finger].y,3)
+        if (i_f >= 0.7):
+            i_f = 0.7
+        elif (i_f <= 0.4 and i_f > 0.7):
+            i_f = 0.4
+        i_f = str(i_f)
+        print('idex finger location: ',i_f)
         arduino.write(bytes(w+','+p+','+r_f+','+m_f+','+i_f,'utf-8'))
-        time.sleep(0.01)
+        time.sleep(0.005)
         mp_drawing.draw_landmarks(
             image,
             hand_landmarks,
             mp_hands.HAND_CONNECTIONS,
             mp_drawing_styles.get_default_hand_landmarks_style(),
             mp_drawing_styles.get_default_hand_connections_style())
+        x = [landmark.x for landmark in hand_landmarks.landmark]
+        y = [landmark.y for landmark in hand_landmarks.landmark]
+        center = np.array([np.mean(x)*image_width, np.mean(y)*image_height]).astype('int32')
+        cv2.rectangle(image, (center[0]-300,center[1]-300), (center[0]+300,center[1]+300), (255,0,0), 2)
     # Flip the image horizontally for a selfie-view display.
     cv2.imshow('MediaPipe Hands', cv2.flip(image, 1))
     if cv2.waitKey(5) & 0xFF == 27:

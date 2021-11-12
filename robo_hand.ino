@@ -8,7 +8,7 @@
 
 /////////////////////////////////////////////////////////////////////////////
 
-//#include <Servo.h>
+#include <Servo.h>
 
 ////////////////////////////////////////////////////////////////////////
 
@@ -16,7 +16,7 @@
 //Servo servo_pinky;
 //Servo servo_m_f;
 //Servo servo_r_f;
-//Servo servo_i_f;
+Servo servo_i_f;
 
 const int wrist = 3;
 const int pinky = 5;
@@ -46,7 +46,7 @@ void setup()
  //servo_pinky.attach(pinky);
  //servo_m_f.attach(middle_finger);
  //servo_r_f.attach(ring_finger);
- //servo_i_f.attach(index_finger);
+ servo_i_f.attach(index_finger);
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -57,28 +57,32 @@ void loop()
  while (!Serial.available());
  data = Serial.readString();
  //Serial.println(data);
- wrist_angle = atof(data.c_str());
- pinky_angle = atof(data.c_str()+6);
- m_f_angle = atof(data.c_str()+12);
- r_f_angle = atof(data.c_str()+18);
- i_f_angle = atof(data.c_str()+24);
- //Serial.println(data);
- Serial.println(wrist_angle);// for debugging only
- Serial.println(pinky_angle);// for debugging only
- Serial.println(m_f_angle);// for debugging only
- Serial.println(r_f_angle);// for debugging only
+ //wrist_angle = atof(data.c_str());
+ //pinky_angle = atof(data.c_str()+6);
+ //m_f_angle = atof(data.c_str()+12);
+ //r_f_angle = atof(data.c_str()+18);
+ i_f_angle = atof(data.c_str()+24)*100;
+ Serial.print("value before: ");
  Serial.println(i_f_angle);// for debugging only
- wrist_angle = map(wrist_angle,30.0,90.0,255,0);
- pinky_angle = map(pinky_angle,30.0,90.0,255,0);
- m_f_angle = map(m_f_angle,0.0,1.0,255,0);
- r_f_angle = map(r_f_angle,0.0,1.0,255,0);
- i_f_angle = map(i_f_angle,0.0,1.0,255,0);
- delay(10);
- analogWrite(wrist,wrist_angle);
- analogWrite(pinky,pinky_angle);
- analogWrite(middle_finger,m_f_angle);
- analogWrite(ring_finger,r_f_angle);
- analogWrite(index_finger,i_f_angle);
+ //Serial.println(data);
+ //Serial.println(wrist_angle);// for debugging only
+ //Serial.println(pinky_angle);// for debugging only
+ //Serial.println(m_f_angle);// for debugging only
+ //Serial.println(r_f_angle);// for debugging only
+ //wrist_angle = map(wrist_angle,30.0,90.0,255,0);
+ //pinky_angle = map(pinky_angle,30.0,90.0,255,0);
+ //m_f_angle = map(m_f_angle,0.0,1.0,255,0);
+ //r_f_angle = map(r_f_angle,0.0,1.0,255,0);
+ i_f_angle = map(i_f_angle,40,70,0,170);
+ Serial.print("value after: ");
+ Serial.println(i_f_angle);// for debugging only
+ //analogWrite(wrist,wrist_angle);
+ //analogWrite(pinky,pinky_angle);
+ //analogWrite(middle_finger,m_f_angle);
+ //analogWrite(ring_finger,r_f_angle);
+ //analogWrite(index_finger,i_f_angle);
+ servo_i_f.write(i_f_angle);
+ delay(100);
   //Ptr = data;
  //wrist_angle = atof(data);	
  //pinky_angle = atof(+2data);
