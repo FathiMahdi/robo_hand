@@ -69,12 +69,12 @@ with mp_hands.Hands(
 # For webcam input:
 cap = cv2.VideoCapture() # change if you have multi cam
 cap.open('http://172.18.39.139:8000')
-arduino = serial.Serial(port='/dev/ttyACM0',baudrate=115200,timeout=0.8)
+arduino = serial.Serial(port='/dev/ttyACM0',baudrate=2000000,timeout=0.8)
 with mp_hands.Hands(
     max_num_hands=1,
     model_complexity=0,
-    min_detection_confidence=0.7,
-    min_tracking_confidence=0.7) as hands:
+    min_detection_confidence=0.8,
+    min_tracking_confidence=0.8) as hands:
   while cap.isOpened():
     success, image = cap.read()
     if not success:
@@ -123,9 +123,9 @@ with mp_hands.Hands(
         elif (i_f <= 0.4 and i_f > 0.7):
             i_f = 0.4
         i_f = str(i_f)
-        print('idex finger location: ',i_f)
+        print('idex finger location: ',w)
         arduino.write(bytes(w+','+p+','+r_f+','+m_f+','+i_f,'utf-8'))
-        time.sleep(0.005)
+        #time.sleep(0.005)
         mp_drawing.draw_landmarks(
             image,
             hand_landmarks,
